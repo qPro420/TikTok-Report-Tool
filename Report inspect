@@ -1,0 +1,34 @@
+import requests
+from bs4 import BeautifulSoup
+
+def fetch_tiktok_page(url):
+    try:
+        # Send a GET request to the TikTok page
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad responses
+        return response.text
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching the TikTok page: {e}")
+        return None
+
+def inspect_element(html_content, element_tag):
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
+    # Find all elements with the specified tag
+    elements = soup.find_all(element_tag)
+    return elements
+
+def main():
+    url = "https://www.tiktok.com/"
+    element_tag = "div"  # Example tag to inspect
+
+    # Fetch the TikTok page
+    html_content = fetch_tiktok_page(url)
+    if html_content:
+        # Inspect the specified element
+        elements = inspect_element(html_content, element_tag)
+        for index, element in enumerate(elements):
+            print(f"Element {index + 1}: {element}")
+
+if __name__ == "__main__":
+    main()
